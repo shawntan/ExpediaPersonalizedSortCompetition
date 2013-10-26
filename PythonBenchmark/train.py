@@ -1,33 +1,33 @@
 import data_io
+import sys
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-
+train_file = sys.argv[1]
+model_file  = sys.argv[2]
 def main():
-    print("Reading training data")
-    train = data_io.read_train()
-    train.fillna(0, inplace=True)
+	print("Reading training data")
+	train = pd.read_csv(
+			train_file,
+			header    = 0,
+			chunksize = 100000,
+			index_col = 0
+		)
+	print dir(train)
+	"""
+	feature_names = list(train_sample.columns)
+	feature_names.remove("click_bool")
+	feature_names.remove("booking_bool")
+	feature_names.remove("gross_bookings_usd")
+	feature_names.remove("date_time")
+	feature_names.remove("position")
+	"""
+	feature_names = ['prop_brand_bool','srch_saturday_night_bool','random_bool']
+	#feature_names.remove("booking_bool")
 
-    train_sample = train[:100000].fillna(value=0)
+	for train_sample in train:
+		train_sample.fillna(0.5,inplace=True)
+		features = train_sample[feature_names].values
+		print features
 
-    feature_names = list(train_sample.columns)
-    feature_names.remove("click_bool")
-    feature_names.remove("booking_bool")
-    feature_names.remove("gross_bookings_usd")
-    feature_names.remove("date_time")
-    feature_names.remove("position")
-
-    features = train_sample[feature_names].values
-    target = train_sample["booking_bool"].values
-
-    print("Training the Classifier")
-    classifier = RandomForestClassifier(n_estimators=50, 
-                                        verbose=2,
-                                        n_jobs=1,
-                                        min_samples_split=10,
-                                        random_state=1)
-    classifier.fit(features, target)
-    
-    print("Saving the classifier")
-    data_io.save_model(classifier)
-    
 if __name__=="__main__":
-    main()
+	main()
