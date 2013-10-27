@@ -21,13 +21,27 @@ def main():
 	feature_names.remove("date_time")
 	feature_names.remove("position")
 	"""
-	feature_names = ['prop_brand_bool','srch_saturday_night_bool','random_bool']
+	feature_names = [
+			'prop_brand_bool',
+			'srch_saturday_night_bool',
+			'random_bool',
+			'promotion_flag',
+			'comp1_inv',
+			'comp2_inv',
+			'comp3_inv',
+			'comp4_inv',
+			'comp5_inv',
+			'comp6_inv',
+			'comp7_inv',
+			'comp8_inv',
+		]
 	#feature_names.remove("booking_bool")
 
 	for train_sample in train:
 		train_sample.fillna(0.5,inplace=True)
 		features = train_sample[feature_names].values
-		print features
+		for f in features:
+			print f
 
 if __name__=="__main__":
 	main()
